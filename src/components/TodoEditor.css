@@ -1,0 +1,28 @@
+.TodoEditor .editor_wrapper {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.TodoEditor input {
+    flex: 1;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.TodoEditor input:focus {
+    outline: none;
+    border: 1px solid #58a3c4;
+    box-shadow: 0 0 2px #58a3c4;
+}
+
+.TodoEditor button {
+    cursor: pointer;
+    width: 80px;
+    border: none;
+    background-color: #58a3c4;
+    color: white;
+    border-radius: 5px;
+}
