@@ -3,7 +3,7 @@ import Header from './components/Header';
 import TestComp from './components/TestComp';
 import TodoEditor from './components/TodoEditor';
 import TodoList from './components/TodoList';
-import { useState, useRef, useReducer } from 'react';
+import { useState, useRef, useReducer, useCallback } from 'react';
 
 const mockDataTodo = [
   {
@@ -87,22 +87,22 @@ function App() {
   //     )
   //   )
   // }
-  const onUpdate = (targetId) => {
+  const onUpdate = useCallback((targetId) => {
     dispatch({
       type: "UPDATE",
       targetId,
-    })
-  }
+    });
+  }, []);
 
   // const onDelete = (targetId) => {
   //   setTodo(todo.filter((it) => it.id !== targetId));
   // }
-  const onDelete = (targetId) => {
+  const onDelete = useCallback((targetId) => {
     dispatch({
       type: "DELETE",
       targetId,
-    })
-  }
+    });
+  }, []);
 
   return (
     <div className='App'>
