@@ -1,9 +1,11 @@
 import "./TodoList.css";
 import TodoItem from "./TodoItem";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
+import { TodoStateContext } from "../App";
 
-const TodoList = ({ todo, onUpdate, onDelete }) => {
+const TodoList = () => {
     const [search, setSearch] = useState("");
+    const todo = useContext(TodoStateContext);
 
     const onChangeSearch = (e) => {
         setSearch(e.target.value);
@@ -33,7 +35,7 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
         // console.log("analyzeTodo() 함수 호출");
         const totalCount = todo.length;
         // todo.filter((it) => it.isDone) -> isDone 이 true 인 것만 모은 새로운 배열
-        const doneCount = todo.filter((it) => it.inDone).length;
+        const doneCount = todo.filter((it) => it.isDone).length;
         const notDoneCount = totalCount - doneCount;
         return {
             totalCount,
@@ -46,19 +48,23 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
     return (
         <div className="TodoList">
             <h4>Todo List 🌱</h4>
+            <input value={search} onChange={onChangeSearch} className="searchbar" placeholder="검색어를 입력해주세요 !" />
+            <div className="list_wrapper">
+                {getSearchResult().map((it) => (
+                    <TodoItem key={it.id} {...it} />
+                ))}
+            </div>
             <div>
                 <div>Total todo: {totalCount}</div>
                 <div>Finished todo: {doneCount}</div>
                 <div>Unfinished todo: {notDoneCount}</div>
             </div>
-            <input value={search} onChange={onChangeSearch} className="searchbar" placeholder="검색어를 입력해주세요 !" />
-            <div className="list_wrapper">
-                {getSearchResult().map((it) => (
-                    <TodoItem key={it.id} {...it} onUpdate={onUpdate} onDelete={onDelete} />
-                ))}
-            </div>
         </div>
     )
 }
+
+TodoList.defaultProps = {
+    todo: [],
+};
 
 export default TodoList;
