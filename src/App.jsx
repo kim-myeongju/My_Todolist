@@ -28,7 +28,8 @@ export const TodoStateContext = createContext();
 export const TodoDispatchContext = createContext();
 
 function App() {
-  console.log("App 실행됨");
+  console.log("App Start");
+  
   const [todo, dispatch] = useReducer(reducer, initialState);
 
   const onCreate = async (content) => {

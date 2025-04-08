@@ -27,7 +27,10 @@ db.connect(err => {
 
 // 추가
 app.post('/api/todos', (req, res) => {
-    const { content } = req.body.content;
+    const { content } = req.body;
+    if (!content || content.trim() === "") {
+        return res.status(400).json({ message: "content가 비어있습니다" });
+    }
     const createdDate = new Date();
     const sql = 'insert into todos (content, isDone, createdDate) values (?, ?, ?)';
     db.query(sql, [content, false, createdDate], (err, result) => {

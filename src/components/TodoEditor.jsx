@@ -3,6 +3,8 @@ import { useState, useRef, useContext } from "react";
 import { TodoDispatchContext } from "../App";
 
 const TodoEditor = () => {
+    console.log("TodoEditor Start");
+    
     const [content, setContent] = useState("");
     const inputRef = useRef();
     const { onCreate } = useContext(TodoDispatchContext);

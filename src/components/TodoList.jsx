@@ -4,6 +4,8 @@ import { useState, useContext } from "react";
 import { TodoStateContext } from "../App";
 
 const TodoList = () => {
+    console.log("TodoList Start");
+    
     const [search, setSearch] = useState("");
     const todo = useContext(TodoStateContext);
 
