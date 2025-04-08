@@ -12,7 +12,7 @@ const TodoItem = ({ id, content, isDone, createdDate }) => {
     const { onUpdate, onDelete } = useContext(TodoDispatchContext);
 
     const onChangeCheckBox = () => {
-        onUpdate(id);
+        onUpdate(id, !isDone);
     }
 
     const onClickDelete = () => {
@@ -22,7 +22,7 @@ const TodoItem = ({ id, content, isDone, createdDate }) => {
     return (
         <div className="TodoItem">
             <div className="checkbox_col">
-                <input onChange={onChangeCheckBox} checked={isDone} type="checkbox" />
+                <input onChange={onChangeCheckBox} checked={!!isDone} type="checkbox" />
             </div>
             <div className="title_col">{content}</div>
             <div className="date_col">{new Date(createdDate).toLocaleDateString()}</div>

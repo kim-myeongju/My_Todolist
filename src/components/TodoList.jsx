@@ -1,6 +1,6 @@
 import "./TodoList.css";
 import TodoItem from "./TodoItem";
-import { useState, useMemo, useContext } from "react";
+import { useState, useContext } from "react";
 import { TodoStateContext } from "../App";
 
 const TodoList = () => {
@@ -15,9 +15,13 @@ const TodoList = () => {
         return search === "" ? todo : todo.filter((it) => it.content.toLowerCase().includes(search.toLowerCase()));
     }
 
-    // const analyzeTodo = () => {
-    //     console.log("analyzeTodo() 함수 호출");
+    /* useMemo: useMemo를 호출하고 첫 번째 인수로 메모이제이션하려는 콜백함수 전달. 이 함수는 두 번째 인수로 전달할
+    의존성 배열의 값이 변하지 않는 한 다시 호출되지 않음.
+    만약 두 번째 인수의 값이 변하게 되면 콜백 함수를 다시 호출해서 변경된 값을 변수에 다시 저장함. */
+    // const analyzeTodo = useMemo(() => {
+    //     // console.log("analyzeTodo() 함수 호출");
     //     const totalCount = todo.length;
+    //     // todo.filter((it) => it.isDone) -> isDone 이 true 인 것만 모은 새로운 배열
     //     const doneCount = todo.filter((it) => it.isDone).length;
     //     const notDoneCount = totalCount - doneCount;
     //     return {
@@ -25,25 +29,8 @@ const TodoList = () => {
     //         doneCount,
     //         notDoneCount,
     //     };
-    // };
-    // const { totalCount, doneCount, notDoneCount } = analyzeTodo();
-
-    /* useMemo: useMemo를 호출하고 첫 번째 인수로 메모이제이션하려는 콜백함수 전달. 이 함수는 두 번째 인수로 전달할
-    의존성 배열의 값이 변하지 않는 한 다시 호출되지 않음.
-    만약 두 번째 인수의 값이 변하게 되면 콜백 함수를 다시 호출해서 변경된 값을 변수에 다시 저장함. */
-    const analyzeTodo = useMemo(() => {
-        // console.log("analyzeTodo() 함수 호출");
-        const totalCount = todo.length;
-        // todo.filter((it) => it.isDone) -> isDone 이 true 인 것만 모은 새로운 배열
-        const doneCount = todo.filter((it) => it.isDone).length;
-        const notDoneCount = totalCount - doneCount;
-        return {
-            totalCount,
-            doneCount,
-            notDoneCount,
-        };
-    }, [todo]);
-    const {totalCount, doneCount, notDoneCount} = analyzeTodo;
+    // }, [todo]);
+    // const {totalCount, doneCount, notDoneCount} = analyzeTodo;
 
     return (
         <div className="TodoList">
@@ -53,11 +40,6 @@ const TodoList = () => {
                 {getSearchResult().map((it) => (
                     <TodoItem key={it.id} {...it} />
                 ))}
-            </div>
-            <div>
-                <div>Total todo: {totalCount}</div>
-                <div>Finished todo: {doneCount}</div>
-                <div>Unfinished todo: {notDoneCount}</div>
             </div>
         </div>
     )

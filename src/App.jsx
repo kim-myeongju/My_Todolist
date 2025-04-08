@@ -1,39 +1,22 @@
 import './App.css'
 import Header from './components/Header';
-import TestComp from './components/TestComp';
+// import TestComp from './components/TestComp';
 import TodoEditor from './components/TodoEditor';
 import TodoList from './components/TodoList';
-import { useState, useRef, useReducer, useCallback, useMemo, createContext } from 'react';
+import { useReducer, useCallback, useMemo, createContext, useEffect } from 'react';
+import axios from 'axios';
 
-const mockDataTodo = [
-  {
-    id: 0,
-    isDone: false,
-    content: "React Study",
-    createDate: new Date().getTime(),
-  },
-  {
-    id: 1,
-    isDone: false,
-    content: "카페가서 일본원서 읽기",
-    createDate: new Date().getTime(),
-  },
-  {
-    id: 2,
-    isDone: false,
-    content: "토익공부",
-    createdDate: new Date().getTime(),
-  },
-];
+const initialState = [];
 
 const reducer = (state, action) => {
 
   switch(action.type) {
+    case "INIT":
+      return action.newItem;
     case "CREATE":
       return [action.newItem, ...state];
-    case "UPDATE": {
-      return state.map((it) => it.id === action.targetId ? {...it, isDone: !it.isDone} : it);
-    }
+    case "UPDATE":
+      return state.map((it) => it.id === action.targetId ? {...it, isDone: action.completed} : it);
     case "DELETE": {
       return state.filter((it) => it.id !== action.targetId);
     }
@@ -45,66 +28,56 @@ export const TodoStateContext = createContext();
 export const TodoDispatchContext = createContext();
 
 function App() {
-  // const [todo, setTodo] = useState(mockDataTodo);
-  const isRef = useRef(3);
-  const [todo, dispatch] = useReducer(reducer, mockDataTodo);
+  console.log("App 실행됨");
+  const [todo, dispatch] = useReducer(reducer, initialState);
 
-  // const onCreate = (content) => {
-  //   const newItem = {
-  //     id: isRef.current,
-  //     content,
-  //     isDone: false,
-  //     createdDate: new Date().getTime(),
-  //   };
-  //   setTodo([newItem, ...todo]);
-  //   isRef.current++;
-  // }
-  const onCreate = (content) => {
-    dispatch({
-      type: "CREATE",
-      newItem: {
-        id: isRef.current,
-        content,
-        isDone: false,
-        createdDate: new Date().getTime(),
-      },
-    })
+  const onCreate = async (content) => {
+    if (!content.trim()) return;
 
-    isRef.current++;
+    try {
+      const res = await axios.post('http://localhost:3001/api/todos', {content});
+
+      dispatch({type: "CREATE", newItem: res.data});
+    } catch (err) {
+      console.log("App.jsx: 추가 실패- ", err);
+    }
   };
 
-  // const onUpdate = (targetId) => {
-  //   setTodo(
-  //     todo.map(
-  //       // (it) => {
-  //       //   if(it.id === targetId) {
-  //       //     return {
-  //       //       ...it,
-  //       //       isDone: !it.isDone,
-  //       //     };
-  //       //   } else {
-  //       //     return it;
-  //       //   }
-  //       // }
-  //       (it) => it.id === targetId ? {...it, isDone: !it.isDone} : it
-  //     )
-  //   )
-  // }
-  const onUpdate = useCallback((targetId) => {
-    dispatch({
-      type: "UPDATE",
-      targetId,
-    });
+  useEffect(() => {
+    axios.get('http://localhost:3001/api/todos').then((res) => {
+      console.log("서버 연결 성공!");
+      dispatch({type: "INIT", newItem: res.data});
+    })
+    .catch((err) => console.log('App.jsx: 목록 불러오기 실패- ', err));
   }, []);
 
-  // const onDelete = (targetId) => {
-  //   setTodo(todo.filter((it) => it.id !== targetId));
-  // }
-  const onDelete = useCallback((targetId) => {
-    dispatch({
-      type: "DELETE",
-      targetId,
-    });
+  const onUpdate = useCallback(async (targetId, completed) => {
+    try {
+      await axios.put(`http://localhost:3001/api/todos/${targetId}`, {
+        isDone: completed,
+      });
+
+      dispatch({
+        type: "UPDATE",
+        targetId,
+        completed,
+      });
+    } catch (err) {
+      console.log("App.jsx: 수정 실패- ", err);
+    }
+  }, []);
+
+  const onDelete = useCallback(async (targetId) => {
+    try {
+      await axios.delete(`http://localhost:3001/api/todos/${targetId}`);
+
+      dispatch({
+        type: "DELETE",
+        targetId,
+      });
+    } catch (err) {
+      console.log("App.jsx: 삭제 실패- ", err)
+    }
   }, []);
 
   const memoizedDispatches = useMemo(() => {
