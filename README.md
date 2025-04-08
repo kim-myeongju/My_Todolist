@@ -3,3 +3,5 @@
 🗓️ TodoList 만들기✍️
 
 JavaScript + React + HTML + CSS
+
+Node.js + MySql
