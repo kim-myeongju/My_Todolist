@@ -2,3 +2,15 @@
     margin-bottom: 0px;
     color: #58a3c4;
 }
+
+.weather-info {
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+}
+
+.weather-icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
