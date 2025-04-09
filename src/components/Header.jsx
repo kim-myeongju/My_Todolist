@@ -5,12 +5,13 @@ import { useState } from "react";
 
 const Header = () => {
     const [weather, setWeather] = useState();
-    
+    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=Busan&units=metric&lang=kr&appid=${API_KEY}`;
 
     useEffect(() => {
         const fetchWeather = async () => {
             try {
-                const res = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=Busan&units=metric&lang=kr&appid=${API_KEY}`);
+                const res = await axios.get(url);
                 console.log("날씨 확인: ", res.data);
                 setWeather(res.data);
             } catch (err) {
