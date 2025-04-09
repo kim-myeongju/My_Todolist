@@ -7,7 +7,7 @@ create table todos (
     createdDate datetime not null default current_timestamp
 );
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '12345';
+-- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 FLUSH PRIVILEGES;
 
 select * from todos;
