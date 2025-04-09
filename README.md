@@ -4,4 +4,4 @@
 
 JavaScript + React + HTML + CSS
 
-Node.js + MySql
+Node.js +Express + MySql
