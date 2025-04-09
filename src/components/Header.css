@@ -5,8 +5,14 @@
 
 .weather-info {
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     font-size: 18px;
+}
+.weather-info img {
+    margin-right: 5px;
+}
+.weather-info span {
+    margin-right: 3px;
 }
 
 .weather-icon {
